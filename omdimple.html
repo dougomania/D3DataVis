@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+ <head>
+	
+	
+	 <style type="text/css">
+
+		.fixed-nav-bar {
+		 position: fixed;
+		 top: 0;
+		 left: 0;
+		 z-index: 9999;
+		 width: 100%;
+		 height: 200px;
+		 background-color: #FFFFFF;
+		}
+		#scatter{
+		position: relative
+		}
+
+	 </style>
+	 
+ </head>
+<body>
+  
+  <h1  align="center">Olympic Gender Distribution</h1>
+  <nav class="fixed-nav-bar">
+  <!-- Fixed navigation bar content -->
+     <h1  align="center">Olympic Gender Distribution</h1>
+	 <div id="control"></div>
+  </nav>
+  
+  <div id= "text">
+		<h1>"                 "</h1>
+		<h1>"                 "</h1>
+		
+  </div>
+	<h4>Instructions: The histogram above shows the the amount of entries in each Olympics and also is used
+		 As a controler to interactive graphs.</h4>
+	<h2 align="center">Bubble Graphs of Women in sport</h2>
+	<h3>What the following graphs show is how women in sport have changed through the years of the summer
+	     Olympics from 1896 to 2008. This graph includes all countries that are listed in current IOC NOC codes.
+		 Countires such as USSR were not included as they do not exist anymore</h3> 
+	
+  <div id="scatter"></div>
+  <h3>As it is easy to see from the graph countries with high medal count were usually wom more than 50% of their medals
+  from their female team. What is also easy to see is that the dots are sckewed towards to the "left" signifying that
+  teams that do not score as many medals typically do so with their male athletes. If their were even distribution in sport
+  in all countries. The largest teams would be around the 50% mark and the smaller teams would be even on each side.</h3> 
+	
+  <div id="scatterNA"></div>
+  <div id="scatterASIA"></div>
+  <div id="scatterEUR"></div>
+  <div id="scatterAF"></div>
+  <div id="scatterSA"></div>
+  <div id="scatterOC"></div>
+  <div id="chart1"></div>
+  <div id="chart2"></div>
+  
+	
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
+  <script type="text/javascript">
+
+	
+  
+    function draw(data){
+      //THIS IS THE GRAPH THAT DOES W% 
+		//fiters the data by year 
+		data = dimple.filterData(data, "Year", [
+              "1896","1900","1904","1908","1912","1920","1924","1928","1932","1936","1948","1952","1956","1960",
+			  "1964","1968","1972","1976","1980","1984","1988","1992","1996","2000","2004","2008",]
+			  );
+		 //Below is created a new SVG with (ID, Width,Height)	
+		 var svg = dimple.newSvg("#chart1", 1400, 600);
+		 //This creates a new dimple chart by combing data with the chart
+		 var myChart = new dimple.chart(svg, data);  
+		 //Add category bars to bar chart 
+		 var x = myChart.addCategoryAxis("x", "NOC");
+		 x.addOrderRule("W_MC", true);
+		 //adds the 'measure' for the bar chart (not sure why no var y)
+		 myChart.addMeasureAxis("y", "W_MC");
+		 //This creates and identifies it has a bar chart (extra grouping, what chart)
+		 myChart.addSeries('Gender', dimple.plot.bar);
+		// The frame duration for the animation in milliseconds
+         var frame = 2000;
+         var firstTick = true;
+		 // Add a storyboard to the main chart and set the tick event
+         var story = myChart.setStoryboard("Year");
+         // Change the frame duration
+         story.frameDuration = frame;
+         // Order the storyboard by date
+         story.addOrderRule("Year");
+		 //This is what draws the chart
+		 myChart.draw()
+ 
+		//THIS GRAPH DOES the w% by percent 
+		//fiters the data by year 
+		 data = dimple.filterData(data, "Year", [
+              "1896","1900","1904","1908","1912","1920","1924","1928","1932","1936","1948","1952","1956","1960",
+			  "1964","1968","1972","1976","1980","1984","1988","1992","1996","2000","2004","2008",]
+          );
+		
+		 var frame = 2000;
+         var firstTick = true;
+		 //Below is created a new SVG with (ID, Width,Height)	
+		 var svg1 = dimple.newSvg("#chart2", 1400, 600);
+		 //This creates a new dimple chart by combing data with the chart
+		 var myChart1 = new dimple.chart(svg1, data);  
+		 //Add category bars to bar chart 
+		 var x1 = myChart1.addCategoryAxis("x", "NOC");
+		 //adds the 'measure' for the bar chart (not sure why no var y)
+		 myChart1.addMeasureAxis("y", "W%");
+		 //This creates and identifies it has a bar chart (extra grouping, what chart)
+		 myChart1.addSeries('Gender', dimple.plot.bar);
+		 x1.addOrderRule("W_MC", true)
+		 // Add a storyboard to the main chart and set the tick event
+         var story1 = myChart1.setStoryboard("Year");
+         // Change the frame duration
+         story1.frameDuration = frame;
+         // Order the storyboard by date
+         story1.addOrderRule("Year");
+		 //This is what draws the chart
+		 myChart1.draw()
+		 
+		 
+		 //Creats the first scatterplot 
+		 datas = dimple.filterData(data, "Gender","Women")
+		 var svgs = dimple.newSvg("#scatter", 1400,600)
+		 var myScatter = new dimple.chart(svgs,datas)
+		 myScatter.addMeasureAxis("y", "W%");
+         myScatter.addCategoryAxis("x", "Year");
+		 myScatter.addMeasureAxis("z", "TMC")
+		 myScatter.addSeries(["NOC"], dimple.plot.bubble);
+		 //var storys = myScatter.setStoryboard("Year");
+         //storys.frameDuration = frame;
+         //storys.addOrderRule("Year");
+		 myScatter.draw()
+		 
+		 dataNA = dimple.filterData(datas, "cont","North America")
+		 var svgs = dimple.newSvg("#scatterNA", 1400,600)
+		 var myScatter = new dimple.chart(svgs,dataNA)
+		 myScatter.addMeasureAxis("y", "W%");
+         myScatter.addCategoryAxis("x", "Year");
+		 myScatter.addMeasureAxis("z", "TMC")
+		 myScatter.addSeries(["NOC"], dimple.plot.bubble);
+		 myScatter.draw()
+		 
+		 dataASIA = dimple.filterData(datas, "cont","Asia")
+		 var svgs = dimple.newSvg("#scatterASIA", 1400,600)
+		 var myScatter = new dimple.chart(svgs,dataASIA)
+		 myScatter.addMeasureAxis("y", "W%");
+         myScatter.addCategoryAxis("x", "Year");
+		 myScatter.addMeasureAxis("z", "TMC")
+		 myScatter.addSeries(["NOC"], dimple.plot.bubble);
+		 myScatter.draw()
+		 
+		 dataEUROPE = dimple.filterData(datas, "cont","Europe")
+		 var svgs = dimple.newSvg("#scatterEUR", 1400,600)
+		 var myScatter = new dimple.chart(svgs,dataEUROPE)
+		 myScatter.addMeasureAxis("y", "W%");
+         myScatter.addCategoryAxis("x", "Year");
+		 myScatter.addMeasureAxis("z", "TMC")
+		 myScatter.addSeries(["NOC"], dimple.plot.bubble);
+		 myScatter.draw()
+		 
+		 dataAF = dimple.filterData(datas, "cont","Africa")
+		 var svgs = dimple.newSvg("#scatterAF", 1400,600)
+		 var myScatter = new dimple.chart(svgs,dataAF)
+		 myScatter.addMeasureAxis("y", "W%");
+         myScatter.addCategoryAxis("x", "Year");
+		 myScatter.addMeasureAxis("z", "TMC")
+		 myScatter.addSeries(["NOC"], dimple.plot.bubble);
+		 myScatter.draw()
+		 
+		 dataSA = dimple.filterData(datas, "cont","South America")
+		 var svgs = dimple.newSvg("#scatterSA", 1400,600)
+		 var myScatter = new dimple.chart(svgs,dataSA)
+		 myScatter.addMeasureAxis("y", "W%");
+         myScatter.addCategoryAxis("x", "Year");
+		 myScatter.addMeasureAxis("z", "TMC")
+		 myScatter.addSeries(["NOC"], dimple.plot.bubble);
+		 myScatter.draw()
+		 
+		 dataOC = dimple.filterData(datas, "cont","Oceania")
+		 var svgs = dimple.newSvg("#scatterOC", 1400,600)
+		 var myScatter = new dimple.chart(svgs,dataOC)
+		 myScatter.addMeasureAxis("y", "W%");
+         myScatter.addCategoryAxis("x", "Year");
+		 myScatter.addMeasureAxis("z", "TMC")
+		 myScatter.addSeries(["NOC"], dimple.plot.bubble);
+		 myScatter.draw()
+		 
+		 
+		 
+		 var svgi = dimple.newSvg("#control", 1400, 100);
+         var indicator = new dimple.chart(svgi, data);
+         var ix = indicator.addCategoryAxis("x", "Year");
+         var iy = indicator.addMeasureAxis("y", "Year");
+         iy.hidden = true;
+         ix.hidden = true;
+         ix.addOrderRule("Date", "Desc");
+         // Place the indicator bar chart to the right
+         //indicator.setBounds(10, 50, 80, 120);
+         var si = indicator.addSeries(null, dimple.plot.bar);
+
+         // add an event handler for the indicator
+         si.addEventHandler("click", onClick);
+         indicator.draw();
+
+         // the OnClick method for the event handler
+         // inside, just repeat everything for story and story1
+         function onClick(e) {
+			 // Pause the animation
+			 story.pauseAnimation();
+			 // If it is already selected resume the animation
+			 // otherwise pause and move to the selected month
+             if (e.xValue === story.getFrameValue()) {
+               story.startAnimation();
+			 } else {
+				 story.goToFrame(e.xValue);
+				 story.pauseAnimation();
+			 }
+
+			 // "rinse and repeat" for story1
+			 story1.pauseAnimation();
+			 // If it is already selected resume the animation
+			 // otherwise pause and move to the selected month
+			 if (e.xValue === story1.getFrameValue()) {
+				 story1.startAnimation();
+			 } else {
+				 story1.goToFrame(e.xValue);
+				 story1.pauseAnimation();
+				}
+         }
+		 
+		 
+		 
+		
+	}
+    
+  </script>
+  <script type="text/javascript">
+  d3.csv("Olympics_MC.csv", draw);
+  
+ 
+ 
+  </script>
+</body>
+</html>

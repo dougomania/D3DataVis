@@ -1,0 +1,15 @@
+How to get the localhost 
+
+http://localhost:8000/basic_charts.html
+
+1. Go to folders that you want to load 
+2. CMD:   python -m SimpleHTTPServer
+
+
+To load
+http://localhost:8000
+
+For example
+http://localhost:8000/basic_charts.html
+
+"C:\Users\H.P\Dropbox\data analysis\D3DataVis"

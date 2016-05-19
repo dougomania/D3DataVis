@@ -1,0 +1,18 @@
+
+
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://dimplejs.org/dist/dimple.v2.1.2.min.js"></script>
+<script type="text/javascript">
+  //creates the chart container 
+  var svg = dimple.newSvg("#chartContainer", 800, 430);
+  d3.csv("OlympicMedal.csv", function(data) {
+      var myChart = new dimple.chart(svg, data);
+      myChart.setBounds(60, 10, 400, 330)
+      var x = myChart.addCategoryAxis("x", ["MaleMC"]);
+      myChart.addMeasureAxis("y", "D/S");
+      var s = myChart.addSeries("MaleMC", dimple.plot.bar);
+      s.barGap = 0.05;
+      myChart.draw();
+  });
+</script>
